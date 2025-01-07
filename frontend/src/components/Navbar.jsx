@@ -10,7 +10,7 @@ import { Link } from 'react-router';
 
 
 function Navbar() {
-  const currentUser=true
+  const currentUser=false
   const [isDroppedDown, setIsDroppedDown] = React.useState(false)
   console.log(isDroppedDown)
   const navigation =[
@@ -69,7 +69,7 @@ function Navbar() {
          </button>
          </>
          : 
-        <Link>
+        <Link to="/login">
         <MdLogin className='size-8' />
         </Link> 
          }

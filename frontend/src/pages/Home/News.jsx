@@ -48,7 +48,7 @@ const news = [
 
 const News = () => {
   return (
-    <div className='py-16'>
+    <div className='py-16 m-4'>
         <h2 className='text-3xl font-semibold mb-6'>News </h2>
 
         <Swiper
