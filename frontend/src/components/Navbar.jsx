@@ -7,10 +7,13 @@ import { MdLogin } from "react-icons/md";
 import { FaRegHeart } from "react-icons/fa";
 import { BsCart4 } from "react-icons/bs";
 import { Link } from 'react-router';
+import { useSelector } from 'react-redux';
 
 
 function Navbar() {
   const currentUser=false
+  const cartItems=useSelector((state)=>(state.cart.cartItems))
+  console.log(cartItems);
   const [isDroppedDown, setIsDroppedDown] = React.useState(false)
   console.log(isDroppedDown)
   const navigation =[
@@ -76,9 +79,11 @@ function Navbar() {
             <button className='hidden sm:block'>
             <FaRegHeart className='size-8' />
             </button>
-            <Link to="/cart" className='bg-primary px-6 rounded-2xl'>
+            <Link to="/cart" className='bg-primary px-6 rounded-2xl flex gap-2 items-center justify-between'>
             <BsCart4 className='size-8'/>
-
+{
+ cartItems.length&& <span className=' font-bold text-xl '>{cartItems.length}</span>
+}
             </Link>
 
 
