@@ -7,6 +7,7 @@ import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 // import required modules
 import { Pagination,Mousewheel,Navigation } from 'swiper/modules';
+import { Link } from 'react-router';
 
 function Recommend() {
   
@@ -52,7 +53,9 @@ function Recommend() {
           {
               RecommendedBooks.map((book,index)=>(
                 <SwiperSlide key={index}>
+                  <Link key={index} to={`/books/${book._id}`}>
                     <BookCard key={index} book={book}/>
+                  </Link>
                 </SwiperSlide>  
                 
               ))

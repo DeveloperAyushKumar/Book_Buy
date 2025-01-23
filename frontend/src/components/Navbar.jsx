@@ -8,10 +8,11 @@ import { FaRegHeart } from "react-icons/fa";
 import { BsCart4 } from "react-icons/bs";
 import { Link } from 'react-router';
 import { useSelector } from 'react-redux';
+import { useAuth } from '../context/AuthContext';
 
 
 function Navbar() {
-  const currentUser=false
+  const {currentUser,logout}=useAuth();
   const cartItems=useSelector((state)=>(state.cart.cartItems))
   console.log(cartItems);
   const [isDroppedDown, setIsDroppedDown] = React.useState(false)
@@ -66,6 +67,18 @@ function Navbar() {
                   </li>
                 ))
               }
+              {
+                 currentUser&& <li className=' px-6 py-1 md:px-8 font-primary border-b-2 border-white ' key="logout">
+                  {/* <Link className='text-white hover:font-semibold' to={item.herf}> */}
+                  <button onClick={()=>logout()}>
+
+                  logout
+                  </button>
+                  {/* </Link> */}
+                </li>
+
+              }
+
             </ul>
           </div>
          }

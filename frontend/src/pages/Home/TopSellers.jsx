@@ -1,20 +1,27 @@
 import React from 'react'
 import { useState, useEffect } from 'react';
 import BookCard from "../Books/BookCard.jsx";
+import { Link } from 'react-router';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 // import required modules
 import { Pagination,Mousewheel,Navigation } from 'swiper/modules';
+import { useFetchAllBooksQuery } from '../../redux/features/books/booksApi.js';
 
 const categories=["All","Business","Fiction","Horror","Adventure"]
 function TopSellers() {
     const [selectedCategory, setSelectedCategory] = useState('All')
-    const [books, setBooks] = useState([]);
-    useEffect(() => {
-        fetch("books.json").then((res)=>res.json()).then((data)=>setBooks(data))
-    },[])
+    // const [books, setBooks] = useState([]);
+    // useEffect(() => {
+    //     fetch("books.json").then((res)=>res.json()).then((data)=>setBooks(data))
+    // },[])
+// const arr=[{vale:1}];
+// console.log(arr)
+    const {data:books=[]}=useFetchAllBooksQuery();
+    console.log(books)
+    // console.log(Array.isArray(books));
     const filteredBooks = books.filter((book)=>selectedCategory === "All" || book.category === selectedCategory.toLowerCase())
     // console.log(filteredBooks)
   return (
@@ -64,7 +71,10 @@ function TopSellers() {
           {
               filteredBooks.map((book,index)=>(
                 <SwiperSlide key={index}>
+                  {/* {console.log(book)} */}
+                     <Link key={index} to={`/books/${book._id}`}>
                     <BookCard key={index} book={book}/>
+                  </Link>
                 </SwiperSlide>  
                 
               ))

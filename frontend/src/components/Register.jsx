@@ -1,17 +1,34 @@
 import React from 'react'
 import { FaGoogle } from 'react-icons/fa'
-import { Link } from 'react-router'
+import { Link, useNavigate } from 'react-router'
 import {useForm} from 'react-hook-form'
+import { useAuth } from '../context/AuthContext'
 
 function Register() {
+  const navigate=useNavigate();
   const [message, setMessage] = React.useState('')
+  const {registerUser}=useAuth()
   const handleGoogleLogin = () => {
     console.log('Google Login')
+    navigate("/")
+
 
   }
   const {register, handleSubmit,watch,formState:{errors}} = useForm()
-  const onSubmit = (data) => {
-    console.log(data)
+  const onSubmit = async(data) => {
+    // console.log(data)
+    try {
+      
+      registerUser(data.email, data.password);
+      alert("Registeration Successfull");
+    navigate("/")
+
+
+    } catch (error) {
+      setMessage("Please provide valid email and password")
+      console.log(error)
+    }
+
   }
   return (
     <div className='border flex items-center justify-center h-[calc(100vh-120px)] '>
