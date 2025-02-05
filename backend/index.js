@@ -23,7 +23,7 @@ async function main() {
   await mongoose.connect(process.env.DB_URL) // makes connection to the db
   
 }
-// 9NN0uezOIfi3HzId
+
 main().then(()=>console.log("mongoDb connected successfully")).catch(err=>console.log(err))
 app.use('/', (req, res) => {
   res.send('Hello World!')
