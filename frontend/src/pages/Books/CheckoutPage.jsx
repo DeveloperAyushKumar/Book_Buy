@@ -5,12 +5,13 @@ import { Link, useNavigate } from 'react-router';
 // import { useAuth } from '../../context/AuthContext';
 
 import Swal from'sweetalert2';
+import { useAuth } from '../../context/AuthContext';
 // import { useCreateOrderMutation } from '../../redux/features/orders/ordersApi';
 
 const CheckoutPage = () => {
     const cartItems = useSelector(state => state.cart.cartItems);
     const totalPrice = cartItems.reduce((acc, item) => acc + item.newPrice, 0).toFixed(2);
-    const [currentUser,setCurrentUser]=useState(false)
+    const currentUser=useAuth()
     const {
         register,
         handleSubmit,
