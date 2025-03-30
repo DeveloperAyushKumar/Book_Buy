@@ -103,19 +103,20 @@ const deleteABook=async(req,res)=>{
     if(!book){
         res.status(404).send({ 
             message: "Book does not exist",
-            book:newBook,
+         
             
         } )
     }
     res.status(200).send({ 
         message: "Book deleted Sucessfully",
-        book:newBook,
+        book:book,
         
     } )
 
 
     
  } catch (error) {
+    console.error("Failed to delete book ", error)
     res.status(500).send({
         message:"Failed to delete book",
        error

@@ -3,9 +3,12 @@ import { FaGoogle } from 'react-icons/fa'
 import { Link, useNavigate } from 'react-router'
 import {useForm} from 'react-hook-form'
 import { useAuth } from '../context/AuthContext'
+// import { useNavigate } from 'react-router'
+import { useState } from 'react'
+
 
 function Login() {
-  const [message, setMessage] = React.useState('')
+  const [message, setMessage] = useState('')
   const {loginUser,signInWithGoogle}=useAuth();
   const handleGoogleLogin = async () => {
     try {
