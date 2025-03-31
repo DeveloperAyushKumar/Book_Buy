@@ -15,13 +15,31 @@ import axios from "axios"
 export const AuthProvider =({children})=>{
     const [currentUser,setCurrentUser]=useState(null);
     const [loading,setLoading]=useState(true)
-    const registerUser= async(email , password)=>{
-        try {
-            const res=await axios.post(`${import.meta.env.VITE_BACKENDURL}/api/auth/register`,{email,password})
+    const checkAuthStatus=async()=>{
+        try{
+            const res=await axios.get(`${import.meta.env.VITE_BACKENDURL}/api/auth/me`,{
+                headers:{Authorization:`Bearer ${localStorage.getItem('authToken')}`}
+            })
+            console.log(res.data)
             setCurrentUser(res.data.user);
-            return res.data;
-            
+
+        }
+        catch(error){
+            setCurrentUser(null);
+            console.error("error occured in mounting ",error)
+
+        }
+    }
+    const registerUser= async(username ,email , password)=>{
+        try {
+            const res=await axios.post(`${import.meta.env.VITE_BACKENDURL}/api/auth/signup`,{username ,email,password})
+         if(res.status==200||res.status==201){
+            localStorage.setItem("authToken",res.data.token); // store jwt
+            checkAuthStatus(); 
+         }
+         alert( res.data.message);
         } catch (error) {
+            
             console.error("registration failed ",error)
             
         }
@@ -30,9 +48,9 @@ export const AuthProvider =({children})=>{
     // login
     const loginUser= async(email , password)=>{
         try {
-            const res =await axios.post(`${import.meta.env.VITE_BACKENDURL}/api/auth/login`)
-            setCurrentUser(res.data.user);
-            return res.data
+            const res =await axios.post(`${import.meta.env.VITE_BACKENDURL}/api/auth/login`,{email,password})
+          checkAuthStatus()
+            alert(res.message)
         } catch (error) {
             console.error("login failed ",error)
             
@@ -51,7 +69,7 @@ export const AuthProvider =({children})=>{
             await axios.post(`${import.meta.env.VITE_BACKENDURL}/api/auth/logout`)
             
         } catch (error) {
-            console.error("google login failed")
+            console.error("logout failed",error)
 
         }
     }
@@ -64,21 +82,6 @@ export const AuthProvider =({children})=>{
             localStorage.setItem("authToken",token);
             //remove token from url
             window.history.replaceState({},document.title,window.location.pathname)
-        }
-        const checkAuthStatus=async()=>{
-            try{
-                const res=await axios.get(`${import.meta.env.VITE_BACKENDURL}/api/auth/me`,{
-                    headers:{Authorization:`Bearer ${localStorage.getItem('authToken')}`}
-                })
-                console.log(res.data)
-                setCurrentUser(res.data.user);
-
-            }
-            catch(error){
-                setCurrentUser(null);
-                console.error("error occured in mounting ",error)
-
-            }
         }
         checkAuthStatus();
     },[])

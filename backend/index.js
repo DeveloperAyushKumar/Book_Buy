@@ -45,7 +45,7 @@ async function main() {
 
 main().then(()=>console.log("mongoDb connected successfully")).catch(err=>console.log(err))
 app.use('/', (req, res) => {
-  res.send('Hello World!')
+  res.send('Hello World')
 }
 
 )
