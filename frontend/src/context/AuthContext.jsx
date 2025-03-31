@@ -1,8 +1,9 @@
-import { createUserWithEmailAndPassword, GoogleAuthProvider, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, signOut } from 'firebase/auth';
+// import { createUserWithEmailAndPassword, GoogleAuthProvider, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, signOut } from 'firebase/auth';
+// import { auth } from '../firebase/firebase.config';
+// import { setLogLevel } from 'firebase/app';
 import { createContext, useContext, useEffect, useState} from 'react'
-import { auth } from '../firebase/firebase.config';
-import { setLogLevel } from 'firebase/app';
 const AuthContext =createContext()
+import axios from "axios"
 // using pvodier pattern  : https://mortenbarklund.com/blog/react-architecture-provider-pattern/
 // custom hook that will be used by child components
 
@@ -10,49 +11,88 @@ const AuthContext =createContext()
     return useContext(AuthContext);
 }
 
-// authProvider  ,
+// provider  ,
 export const AuthProvider =({children})=>{
     const [currentUser,setCurrentUser]=useState(null);
     const [loading,setLoading]=useState(true)
-    const googleProvider= new GoogleAuthProvider()
-    //register
-    const registerUser= async(email , password)=>{
-        return await createUserWithEmailAndPassword(auth, email , password);
+    const checkAuthStatus=async()=>{
+        try{
+            const res=await axios.get(`${import.meta.env.VITE_BACKENDURL}/api/auth/me`,{
+                headers:{Authorization:`Bearer ${localStorage.getItem('authToken')}`}
+            })
+            console.log(res.data)
+            setCurrentUser(res.data.user);
+
+        }
+        catch(error){
+            setCurrentUser(null);
+            console.error("error occured in mounting ",error)
+
+        }
+    }
+    const registerUser= async(username ,email , password)=>{
+        try {
+            const res=await axios.post(`${import.meta.env.VITE_BACKENDURL}/api/auth/signup`,{username ,email,password})
+         if(res.status==200||res.status==201){
+            localStorage.setItem("authToken",res.data.token); // store jwt
+            checkAuthStatus(); 
+         }
+         alert( res.data.message);
+        } catch (error) {
+            
+            console.error("registration failed ",error)
+            
+        }
+       
     }  
     // login
     const loginUser= async(email , password)=>{
-        return await signInWithEmailAndPassword(auth, email , password);
+        try {
+            const res =await axios.post(`${import.meta.env.VITE_BACKENDURL}/api/auth/login`,{email,password})
+          checkAuthStatus()
+            alert(res.message)
+        } catch (error) {
+            console.error("login failed ",error)
+            
+        }
+       
     }
     // signIn with google 
     const signInWithGoogle=async ()=>{
-        return await signInWithPopup(auth ,googleProvider);
+        window.location.href=`${import.meta.env.VITE_BACKENDURL}/api/auth/google`
+        
+        
     }
     // logout user
     const logout =async()=>{
-        return await signOut(auth);
+        try {
+            await axios.post(`${import.meta.env.VITE_BACKENDURL}/api/auth/logout`)
+            
+        } catch (error) {
+            console.error("logout failed",error)
+
+        }
     }
     // manage user 
     useEffect(()=>{
-        // onAuthStateChanged return a clean up function to stop listening 
-
-        const unsubscribe =onAuthStateChanged(auth ,(user)=>{
-            setCurrentUser(user);
-            setLoading(false);
-            if(user){
-                const {email, displayName, photoURL}=user;
-                const userData={
-                    email, username:displayName, photo:photoURL                }
-            }
-        })
-        return ()=>unsubscribe();
+        const urlParams=new URLSearchParams(window.location.search);
+        console.log(urlParams)
+        const token =urlParams.get("token");
+        if(token){
+            localStorage.setItem("authToken",token);
+            //remove token from url
+            window.history.replaceState({},document.title,window.location.pathname)
+        }
+        checkAuthStatus();
     },[])
 
     const value={
+        loading,
         currentUser,
         registerUser,
         loginUser,
         signInWithGoogle,
-        logout
+        logout,
 
     }
 

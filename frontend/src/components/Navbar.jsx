@@ -13,8 +13,9 @@ import { useAuth } from '../context/AuthContext';
 
 function Navbar() {
   const {currentUser,logout}=useAuth();
+  console.log(currentUser)
   const cartItems=useSelector((state)=>(state.cart.cartItems))
-  console.log(cartItems);
+  // console.log(cartItems);
   const [isDroppedDown, setIsDroppedDown] = React.useState(false)
   console.log(isDroppedDown)
   const navigation =[

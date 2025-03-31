@@ -25,7 +25,7 @@ const cartSlice = createSlice({
                     const timer = Swal.getPopup().querySelector("b");
                     timerInterval = setInterval(() => {
                       timer.textContent = `${Swal.getTimerLeft()}`;
-                    }, 100);
+                    }, 200);
                   },
                   willClose: () => {
                     clearInterval(timerInterval);

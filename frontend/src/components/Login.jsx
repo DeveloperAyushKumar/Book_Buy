@@ -3,9 +3,12 @@ import { FaGoogle } from 'react-icons/fa'
 import { Link, useNavigate } from 'react-router'
 import {useForm} from 'react-hook-form'
 import { useAuth } from '../context/AuthContext'
+// import { useNavigate } from 'react-router'
+import { useState } from 'react'
+
 
 function Login() {
-  const [message, setMessage] = React.useState('')
+  const [message, setMessage] = useState('')
   const {loginUser,signInWithGoogle}=useAuth();
   const handleGoogleLogin = async () => {
     try {
@@ -25,7 +28,7 @@ function Login() {
   const onSubmit = async (data) => {
     try {
       await loginUser(data.email, data.password)
-      alert("Login Successful")
+      // alert("Login Successful")
       navigate("/")
 
 

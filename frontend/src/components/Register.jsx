@@ -18,10 +18,9 @@ function Register() {
   const onSubmit = async(data) => {
     // console.log(data)
     try {
-      
-      registerUser(data.email, data.password);
-      alert("Registeration Successfull");
-    navigate("/")
+      setMessage("An verification Mail has been sent to you mail address ")
+      registerUser(data.username,data.email, data.password);
+    // navigate("/")
 
 
     } catch (error) {
@@ -36,11 +35,18 @@ function Register() {
         <h2 className='text-xl font-semibold mb-4'>Please Register</h2>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className=' mb-4'>
+            <label htmlFor="username" className='block text-gray-800 text-sm font-bold mb-2'>Name</label>
+            <input
+            {...register("username",{required:true})}
+            type="text" name="username" id='username' placeholder='what we call you ' className='border-4 rounded-xl shadow appearance-none w-full py-2 px-3 leading-tight focus:outline-none' />
+          </div>
+          <div className=' mb-4'>
             <label htmlFor="email" className='block text-gray-800 text-sm font-bold mb-2'>Email</label>
             <input
             {...register("email",{required:true})}
             type="email" name="email" id='email' placeholder='Email Address' className='border-4 rounded-xl shadow appearance-none w-full py-2 px-3 leading-tight focus:outline-none' />
           </div>
+
           <div className=' mb-4'>
             <label htmlFor="password" className='block text-gray-800 text-sm font-bold mb-2'>Password</label>
             <input
